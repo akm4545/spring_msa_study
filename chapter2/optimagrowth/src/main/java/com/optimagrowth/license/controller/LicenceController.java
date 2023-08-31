@@ -1,13 +1,11 @@
-package com.optimagrowth.optimagrowth.license.controller;
+package com.optimagrowth.license.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.optimagrowth.optimagrowth.license.model.License;
-import com.optimagrowth.optimagrowth.license.service.LicenseService;
+import com.optimagrowth.license.model.License;
+import com.optimagrowth.license.service.LicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

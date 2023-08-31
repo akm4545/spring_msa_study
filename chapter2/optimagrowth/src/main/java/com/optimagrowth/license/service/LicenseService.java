@@ -1,7 +1,6 @@
-package com.optimagrowth.optimagrowth.license.service;
+package com.optimagrowth.license.service;
 
-import com.optimagrowth.optimagrowth.license.model.License;
-import org.apache.logging.log4j.message.Message;
+import com.optimagrowth.license.model.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

@@ -63,7 +63,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-<!--            도커 파일 메이븐-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <!--            도커 파일 메이븐-->
 <!--            Maven을 통해 Docker Image를 만듦-->
 <!--            mvn clean package docker:build 로 메이븐을 이용해 빌드하면 아래 설정을 사용 가능-->
             <plugin>
