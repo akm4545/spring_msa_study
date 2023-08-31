@@ -9,14 +9,19 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.optimagrowth</groupId>
-    <artifactId>optimagrowth</artifactId>
+    <artifactId>licensing-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>optimagrowth</name>
-    <description>optimagrowth</description>
+    <name>License Service</name>
+    <description>Ostock Licensing Service</description>
     <properties>
         <java.version>11</java.version>
+<!--        사용할 변수 생성-->
+        <docker.image.prefix>ostock</docker.image.prefix>
     </properties>
     <dependencies>
+<!--        스프링 부트에는 운영 중인 애플리케이션을 HTTP나 JMX를 이용해서 모니터링하고 관리할 수 있는 기능을 제공하는데, 이것이 spring actuator이다.-->
+<!--        시스템을 운영하다 보면 기능들이 잘 돌아가는지 지속적으로 모니터링하거나 서버를 재기동하거나 로그 정보를 변경하거나 등등 범애플리케이션 관점에서 처리해야 할 일이 많이 있을 때가 있다.-->
+<!--        그러한 기능을 외부에서 쉽게 조작하게 만들기 위한 프로젝트가 spring actuator다.-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -43,6 +48,12 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+<!--        Hypermedia As The Engine Of Application State(HATEOAS)는 application의 상태(state)를 관리하기 위한 기술입니다. -->
+<!--        이 기술은 기존 REST API의 단점1을 보완한 것으로, client는 특정 resource에서 이동할 수 있는 다른 resource에 대한 link를 server로부터 전달받아 사용합니다.-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -50,6 +61,35 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+<!--            도커 파일 메이븐-->
+<!--            Maven을 통해 Docker Image를 만듦-->
+<!--            mvn clean package docker:build 로 메이븐을 이용해 빌드하면 아래 설정을 사용 가능-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <configuration>
+<!--                    리모트 저장소 이름-->
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+<!--                    프로젝트 버전 태그-->
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+<!--                        JAR 파일 위치 Dockerfile에서 사용-->
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
