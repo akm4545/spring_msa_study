@@ -1,0 +1,11 @@
+spring:
+  application:
+#    이름 지정
+    name: licensing-service
+    #프로파일 지정
+  profiles:
+    active: dev
+    #클라우드 컨피그 서버 위치 지정
+  cloud:
+    config:
+      uri: http://localhost:8071

@@ -5,7 +5,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - "SPTRING_PROGILES_ACTIVE=dev"
+      SPRING_PROFILES_ACTIVE: "dev"
+      SPRING_CLOUD_CONFIG_URI: http://localhost:8071
     networks:
       backend:
         aliases:

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.optimagrowth</groupId>
@@ -17,6 +17,7 @@
         <java.version>11</java.version>
 <!--        사용할 변수 생성-->
         <docker.image.prefix>ostock</docker.image.prefix>
+        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
     </properties>
     <dependencies>
 <!--        스프링 부트에는 운영 중인 애플리케이션을 HTTP나 JMX를 이용해서 모니터링하고 관리할 수 있는 기능을 제공하는데, 이것이 spring actuator이다.-->
@@ -54,7 +55,37 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
+
+        <!--스프링 클라우드 컨피그에 필요한 의존성 주입-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+<!--        jpa-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+<!--       postgres 드라이버 설정-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -112,5 +143,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

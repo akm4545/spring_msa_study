@@ -19,7 +19,7 @@ public class LicenceController {
     private LicenseService licenseService;
 
     @GetMapping(value = "/{licenseId}")
-    public ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId, @PathVariable("licenseId") String licenseId){
+    public ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId, @PathVariable("licenseId") String licenseId) throws IllegalAccessException {
         License license = licenseService.getLicense(licenseId, organizationId);
 
         license.add(linkTo(methodOn(LicenceController.class)
@@ -29,13 +29,13 @@ public class LicenceController {
                 linkTo(
                         //메서드 매핑 획득
                         methodOn(LicenceController.class)
-                        .createLicense(organizationId, license, null))
+                        .createLicense(license))
                 .withRel("createLicense"),
                 linkTo(methodOn(LicenceController.class)
-                        .updateLicense(organizationId, license))
+                        .updateLicense(license))
                 .withRel("updateLicense"),
                 linkTo(methodOn(LicenceController.class)
-                        .deleteLicense(organizationId, license.getLicenseId()))
+                        .deleteLicense(license.getLicenseId()))
                 .withRel("deleteLicense")
         );
 
@@ -43,19 +43,17 @@ public class LicenceController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updateLicense(@PathVariable("organizationId") String organizationId, @RequestBody License request){
-        return ResponseEntity.ok(licenseService.updateLicense(request, organizationId));
+    public ResponseEntity<License> updateLicense(@RequestBody License request){
+        return ResponseEntity.ok(licenseService.updateLicense(request));
     }
 
     @PostMapping
-    public ResponseEntity<String> createLicense(@PathVariable("organizationId") String organizationId,
-                                                @RequestBody License request,
-                                                @RequestHeader(value = "Accept-Language", required = false) Locale locale){
-        return ResponseEntity.ok(licenseService.createLicense(request, organizationId, locale));
+    public ResponseEntity<License> createLicense(@RequestBody License request){
+        return ResponseEntity.ok(licenseService.createLicense(request));
     }
 
     @DeleteMapping(value = "/{licenseId}")
-    public ResponseEntity<String> deleteLicense(@PathVariable("organizationId") String organizationId, @PathVariable("licenseId")String licenseId){
-        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, organizationId));
+    public ResponseEntity<String> deleteLicense(@PathVariable("licenseId")String licenseId){
+        return ResponseEntity.ok(licenseService.deleteLicense(licenseId));
     }
 }
