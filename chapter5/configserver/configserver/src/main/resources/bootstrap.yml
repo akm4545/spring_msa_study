@@ -1,0 +1,20 @@
+spring:
+  application:
+#    config-server 이름
+    name: config-server
+#    스프링 프로필 설정
+  profiles:
+    active: native
+
+cloud:
+  config:
+    server:
+      #로컬 구성 정보: classpath 위치나 파일 시스템의 위치가 될 수 있다.
+      native:
+      #특정 파일 시스템 폴더에서 읽어 온다.
+#        구성파일 검색위치 설정
+        search-locations: classpath:/config
+
+#    서버 포트
+server:
+  port:8071
