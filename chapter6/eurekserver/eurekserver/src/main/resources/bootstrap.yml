@@ -1,0 +1,12 @@
+spring:
+  application:
+#    컨피그 서버에서 사용할 이름
+    name: eureka-server
+  cloud:
+    config:
+#      컨피그 서버 위치ㅏ
+      uri: http://configserver:8071
+#   리본 기본 로드벨런서 비활성화
+    loadbalancer:
+      ribbon:
+        enabled: false
