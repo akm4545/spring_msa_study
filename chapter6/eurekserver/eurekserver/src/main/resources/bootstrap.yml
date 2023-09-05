@@ -5,7 +5,7 @@ spring:
   cloud:
     config:
 #      컨피그 서버 위치
-      uri: http://configserver:8071
+      uri: http://localhost:8071
 #   리본 기본 로드벨런서 비활성화
     loadbalancer:
       ribbon:
