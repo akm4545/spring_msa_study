@@ -18,6 +18,7 @@
 <!--        사용할 변수 생성-->
         <docker.image.prefix>ostock</docker.image.prefix>
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+        <resilience4j.version>1.5.0</resilience4j.version>
     </properties>
     <dependencies>
 <!--        스프링 부트에는 운영 중인 애플리케이션을 HTTP나 JMX를 이용해서 모니터링하고 관리할 수 있는 기능을 제공하는데, 이것이 spring actuator이다.-->
@@ -105,6 +106,30 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+<!--    장애 관리를 위한 resilience4j    -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot2</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-timelimiter</artifactId>
+            <version>${resilience4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
     </dependencies>
