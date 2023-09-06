@@ -138,6 +138,7 @@ public class LicenseService {
     @CircuitBreaker(name = "licenseService")
     public List<License> getLicensesByOrganization(String organizationId){
         randomlyRunLong();
+
         return licenseRepository.findByOrganizationId(organizationId);
     }
 
@@ -156,7 +157,7 @@ public class LicenseService {
             Thread.sleep(5000);
 
             throw new java.util.concurrent.TimeoutException();
-        }catch (InterruptedException | TimeoutException e){
+        }catch (Exception e){
             logger.error(e.getMessage());
         }
     }

@@ -16,8 +16,6 @@ import javax.persistence.*;
 public class License extends RepresentationModel<License> {
     @Id
     @Column(name = "license_id", nullable = false)
-    private int id;
-
     private String licenseId;
 
     private String description;
