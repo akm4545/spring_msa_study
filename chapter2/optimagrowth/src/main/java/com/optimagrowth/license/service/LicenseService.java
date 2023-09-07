@@ -11,6 +11,8 @@ import com.optimagrowth.license.utils.UserContextHolder;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,10 +143,17 @@ public class LicenseService {
     //fallbackMethod = 서비스 호출이 실패할 때 호출되는 함수 정의
     //폴백 메서드가 다른 서비스를 호출한다면 해당 서비스 호출 메서드도 서킷브레이커로 보호해주는게 좋다
     @CircuitBreaker(name = "licenseService", fallbackMethod = "buildFallbackLicenseList")
+    //벌크헤드 패턴 = 동시 호출 수 제한    
     //벌크헤드 패턴 적용 기본값은 세마포어 벌크헤드    
     @Bulkhead(name = "bulkheadLicenseService", fallbackMethod = "buildFallbackLicenseList")
-    //스레드풀 방식 벌크해드 패턴 적용    
+    //스레드풀 방식 벌크해드 패턴 적용
 //    @Bulkhead(name = "bulkheadLicenseService", fallbackMethod = "buildFallbackLicenseList", type=Bulkhead.Type.THREADPOOL)
+    //재시도 패턴, 풀백 메서드 적용
+    @Retry(name = "retryLicenseService", fallbackMethod = "buildFallbackLicenseList")
+    //속도 제한기 패턴 = 주어진 시간 프레임 동안 총 호출 수 제한
+//    속도 제한기 패턴
+    @RateLimiter(name = "licenseService", fallbackMethod = "buildFallbackLicenseList")
+//    벌크헤드 패턴과 속도 제한기 패턴은 조합되서 사용될 수 있다
     public List<License> getLicensesByOrganization(String organizationId){
         io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("licenseService");
         System.out.println(circuitBreaker.getName());

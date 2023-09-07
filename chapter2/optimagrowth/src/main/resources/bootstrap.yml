@@ -78,3 +78,25 @@ resilience4j:
         queue-capacity: 1
 #        유휴 스레드가 종료되 전 새 테스크를 기다리는 시간
         keep-alive-duration: 20ms
+#        재시도 패턴
+  retry:
+    instances:
+      retryLicenseService:
+#        재시도 최대 횟수
+        max-retry-attempts: 5
+#        재시도 간 대기 시간
+        wait-duration: 10000
+#        재시도 대상이 되는 예외 목록
+        retry-exceptions:
+          - java.util.concurrent.TimeoutException
+#  속도 제한기 패턴
+  ratelimiter:
+    instances:
+      licenseService:
+#       스레드가 허용을 기다리는 시간
+        timeout-duration: 1000ms
+#        갱신 제한 기간
+        limit-refresh-period: 5000
+#        갱신 제한 기간 동안 가용한 허용 수
+        limit-for-period: 5
+
