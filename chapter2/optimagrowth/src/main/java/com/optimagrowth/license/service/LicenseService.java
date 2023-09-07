@@ -7,6 +7,8 @@ import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.client.OrganizationDiscoveryClient;
 import com.optimagrowth.license.service.client.OrganizationFeignClient;
 import com.optimagrowth.license.service.client.OrganizationRestTemplateClient;
+import com.optimagrowth.license.utils.UserContextHolder;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -135,15 +138,39 @@ public class LicenseService {
     
     //Resilience4J 회로 차단기를 사용, CircuitBreaker로 래핑
     //실패한 모든 호출 시도를 가로챈다
-    @CircuitBreaker(name = "licenseService")
+    //fallbackMethod = 서비스 호출이 실패할 때 호출되는 함수 정의
+    //폴백 메서드가 다른 서비스를 호출한다면 해당 서비스 호출 메서드도 서킷브레이커로 보호해주는게 좋다
+    @CircuitBreaker(name = "licenseService", fallbackMethod = "buildFallbackLicenseList")
+    //벌크헤드 패턴 적용 기본값은 세마포어 벌크헤드    
+    @Bulkhead(name = "bulkheadLicenseService", fallbackMethod = "buildFallbackLicenseList")
+    //스레드풀 방식 벌크해드 패턴 적용    
+//    @Bulkhead(name = "bulkheadLicenseService", fallbackMethod = "buildFallbackLicenseList", type=Bulkhead.Type.THREADPOOL)
     public List<License> getLicensesByOrganization(String organizationId){
         io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("licenseService");
         System.out.println(circuitBreaker.getName());
         System.out.println(circuitBreaker.getCircuitBreakerConfig());
 
+        logger.debug("getLicensesByOrganization Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
+
         randomlyRunLong();
 
         return licenseRepository.findByOrganizationId(organizationId);
+    }
+
+    //풀백 메서드
+    //서킷 브레이커 메서드랑 같은 위치에 존재해야함
+    //원본 메서드 처럼 매개변수가 동일해야 한다
+    private List<License> buildFallbackLicenseList(String organizationId, Throwable t){
+        List<License> fallbackList = new ArrayList<>();
+        License license = new License();
+
+        license.setLicenseId("0000000-00-00000");
+        license.setOrganizationId(organizationId);
+        license.setProductName("Sorry no licensing information currently available");
+
+        fallbackList.add(license);
+
+        return fallbackList;
     }
 
     //DB 통신 장애를 가정하기 위한 메서드

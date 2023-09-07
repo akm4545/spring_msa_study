@@ -39,6 +39,8 @@ resilience4j:
         wait-duration-in-open-state: 10s
 #        실패율 임계치 (백분율)
         failure-rate-threshold: 50
+        slow-call-rate-threshold: 2
+        slow-call-duration-threshold: 3
 #        실패로 기록할 예외 설정
         record-exceptions:
           - org.springframework.web.client.HttpServerErrorException
@@ -52,3 +54,27 @@ resilience4j:
         ring-buffer-size-in-half-open-state: 4
         wait-duration-in-open-state: 20s
         failure-rate-threshold: 60
+#        사용자에게 맞는 스레드 풀 공식
+#   서비스가 정상일 때 최고점에서 초당 요청 수 * 99 백분위수(P99) 지연 시간(단위: 초) + 부하 대비 약간의 추가 스레드
+  bulkhead:
+    instances:
+#      애플리케이션에서 액세스 하는 원격 자원의 수가 적고 각 서비스에 대한 호츌량이 상대적으로 
+#      고르게 분산된 경우 효율적
+#      세마포어 방식 = 서비스 동시 요청 수 제한, 한계에 도달하면 요청 거부
+      bulkheadLicenseService:
+#        쓰레드 차단 시간
+        maxWaitDuration: 10ms
+#        최대 동시 호출 수
+        maxConcurrentCalls: 20
+#        스레드풀 방식 제한된 큐와 고정 스레드 풀 사용 풀과 큐가 다 찬 경우에만 요청 거부
+  thread-pool-bulkhead:
+    instances:
+      bulkheadLicenseService:
+#        스레드 풀에서 최대 스레드 수
+        max-thread-pool-size: 1
+#        코어 스레드 풀 크기
+        core-thread-pool-size: 1
+#        큐 용량
+        queue-capacity: 1
+#        유휴 스레드가 종료되 전 새 테스크를 기다리는 시간
+        keep-alive-duration: 20ms
