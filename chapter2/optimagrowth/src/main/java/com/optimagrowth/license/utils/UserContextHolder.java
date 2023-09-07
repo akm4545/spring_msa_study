@@ -3,6 +3,7 @@ package com.optimagrowth.license.utils;
 import org.springframework.util.Assert;
 
 public class UserContextHolder {
+//    쓰레드 로컬에 저장 = 해당 쓰레드의 변수로 사용
     private static final ThreadLocal<UserContext> userContext = new ThreadLocal<UserContext>();
 
     public static final UserContext getContext(){
