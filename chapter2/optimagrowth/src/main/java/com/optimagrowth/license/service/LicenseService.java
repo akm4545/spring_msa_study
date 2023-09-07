@@ -1,6 +1,5 @@
 package com.optimagrowth.license.service;
 
-import com.netflix.discovery.converters.Auto;
 import com.optimagrowth.license.config.ServiceConfig;
 import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.model.Organization;
@@ -8,19 +7,17 @@ import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.client.OrganizationDiscoveryClient;
 import com.optimagrowth.license.service.client.OrganizationFeignClient;
 import com.optimagrowth.license.service.client.OrganizationRestTemplateClient;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.TimeoutException;
 
 @Service
 public class LicenseService {
@@ -42,6 +39,9 @@ public class LicenseService {
 
     @Autowired
     OrganizationDiscoveryClient organizationDiscoveryClient;
+
+    @Autowired
+    CircuitBreakerRegistry circuitBreakerRegistry;
 
     private static final Logger logger = LoggerFactory.getLogger(LicenseService.class);
 
@@ -137,6 +137,10 @@ public class LicenseService {
     //실패한 모든 호출 시도를 가로챈다
     @CircuitBreaker(name = "licenseService")
     public List<License> getLicensesByOrganization(String organizationId){
+        io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("licenseService");
+        System.out.println(circuitBreaker.getName());
+        System.out.println(circuitBreaker.getCircuitBreakerConfig());
+
         randomlyRunLong();
 
         return licenseRepository.findByOrganizationId(organizationId);

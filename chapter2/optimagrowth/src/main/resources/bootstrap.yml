@@ -9,3 +9,46 @@ spring:
   cloud:
     config:
       uri: http://localhost:8071
+
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.optimagrowth: DEBUG
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+#     라이선싱 서비스 인스턴스 구성 (회로 차단기에 전달되는 이름과 동일)
+      licenseService:
+#        상태 정보 엔드포인트에 대한 구성 정보 노출 여부
+        register-health-indicator: true 
+#        링 버퍼의 닫힌 상태 크기 설정
+        ring-buffer-size-in-closed-state: 5
+#        링 버퍼의 반열린 상태 크기 설정
+        ring-buffer-size-in-half-open-state: 3
+#        열린 상태의 대기 시간
+        wait-duration-in-open-state: 10s
+#        실패율 임계치 (백분율)
+        failure-rate-threshold: 50
+#        실패로 기록할 예외 설정
+        record-exceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - org.springframework.web.client.ResourceAccessException
+#     조직 서비스의 인스턴스 구성
+      organizationService:
+        register-health-indicator: true
+        ring-buffer-size-in-closed-state: 6
+        ring-buffer-size-in-half-open-state: 4
+        wait-duration-in-open-state: 20s
+        failure-rate-threshold: 60
