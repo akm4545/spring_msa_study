@@ -1,0 +1,41 @@
+server:
+  port: 8072
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+spring:
+  cloud:
+    gateway:
+#      서비스 디스커버리를 이용한 자동 경로 매핑
+#      서비스 디스커버리에 등록된 서비스를 기반으로 게이트웨이가 경로를 생성하도록 설정
+      discovery.locator:
+          enabled: true
+          lowerCaseServiceId: true
+#     수동 경로 매핑 방식
+      routes:
+#       경로 Id
+        - id: organization-service
+#          경로 url
+          uri: lb://organization-service
+          predicates:
+            - Path=/organization/**
+#         응답 전후 또는 수정을 위한 수푸랑 web,fukters들을 필터링 함
+          filters:
+#           매개변수 교체 순서로 경로 정규식을 받아 요청 경로를 /organization/** 에서 /**로 변경
+            - RewritePath=/organization/(?<path>.*), /$\{path}
+
+Management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
