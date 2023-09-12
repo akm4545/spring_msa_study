@@ -4,7 +4,7 @@ server:
 eureka:
   instance:
 #    유레카 인스턴스의 호스트 이름
-    hostname: eurekaserver
+    hostname: localhost
   client:
 #    컨피그 서버가 유레카 서비스에 등록되지 않게 함
     registerWithEureka: false
