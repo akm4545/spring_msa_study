@@ -1,5 +1,6 @@
 package com.optimagrowth.license;
 
+import com.optimagrowth.license.utils.UserContextInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -12,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 @SpringBootApplication
@@ -47,9 +50,24 @@ public class LicenseServiceApplication {
     }
 
     //이렇게 설정을 했다면 등록된 RestTemplate 빈을 통해 호출 시 Eureka Server에 eureka-client로 등록된 모든 클라이언트에 대해 Load Balancing이 가능하다. 클라이언트 측에서는 필요한 어플리케이션의 이름만 알고 있으면 된다.
+
     @LoadBalanced
     @Bean
     public RestTemplate getRestTemplate(){
-        return new RestTemplate();
+        RestTemplate template = new RestTemplate();
+
+        List interceptors = template.getInterceptors();
+
+//        RestTemplate객체에 interceptor 추가
+        if(interceptors == null){
+//            인터셉터가 아예 없다면 리스트를 만들어 추가
+            template.setInterceptors(Collections.singletonList(new UserContextInterceptor()));
+        }else{
+//            있다면 인터셉터들 묶음에 추가
+            interceptors.add(new UserContextInterceptor());
+            template.setInterceptors(interceptors);
+        }
+
+        return template;
     }
 }
