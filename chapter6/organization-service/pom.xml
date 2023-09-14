@@ -87,6 +87,18 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+<!--	키클록 스프링 부트 의존성-->
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-spring-boot-starter</artifactId>
+		</dependency>
+
+<!--	스프링 시큐리티 의존성	-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -95,6 +107,14 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+<!--			키클록 스프링 부트 의존성 관리 -->
+			<dependency>
+				<groupId>org.keycloak.bom</groupId>
+				<artifactId>keycloak-adapter-bom</artifactId>
+				<version>11.0.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
