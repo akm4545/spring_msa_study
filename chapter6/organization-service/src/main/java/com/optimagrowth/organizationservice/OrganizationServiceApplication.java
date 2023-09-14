@@ -15,7 +15,7 @@ import java.util.List;
 
 @SpringBootApplication
 @RefreshScope
-@EnableEurekaClient
+//@EnableEurekaClient
 public class OrganizationServiceApplication {
 
 	public static void main(String[] args) {
