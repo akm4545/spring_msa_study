@@ -17,9 +17,9 @@ spring:
     gateway:
 #      서비스 디스커버리를 이용한 자동 경로 매핑
 #      서비스 디스커버리에 등록된 서비스를 기반으로 게이트웨이가 경로를 생성하도록 설정
-      discovery.locator:
-        enabled: true
-        lowerCaseServiceId: true
+#      discovery.locator:
+#        enabled: true
+#        lowerCaseServiceId: true
 #     수동 경로 매핑 방식
       routes:
 #       경로 Id
@@ -35,6 +35,15 @@ spring:
 #           /organization/test 로 요청시 predicates 경로에 포함됨
 #           /organization 를 lb://organization-service로 라우팅하고 뒤의 경로가 lb://organization-service 에서 요청할 경로가 됨
             - RewritePath=/organization/(?<path>.*), /$\{path}
+#           게이트웨이가 막는 header 블랙리스트 (허용하려면 여기서 지워야 한다)
+            - RemoveRequestHeader= Cookie,Set-Cookie
+        - id: licensing-service
+          uri: lb://licensing-service
+          predicates:
+            - Path=/license/**
+          filters:
+            - RewritePath=/license/(?<path>.*), /$\{path}
+            - RemoveRequestHeader= Cookie,Set-Cookie
 
 Management:
   endpoint:

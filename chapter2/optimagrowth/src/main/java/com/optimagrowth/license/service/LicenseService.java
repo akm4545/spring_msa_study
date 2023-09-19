@@ -123,12 +123,12 @@ public class LicenseService {
             case "rest":
                 System.out.println("i am using the rest client");
 
-                organization = organizationFeignClient.getOrganization(organizationId);
+                organization = organizationRestTemplateClient.getOrganization(organizationId);
                 break;
             case "discovery":
                 System.out.println("i am using the discovery client");
 
-                organization = organizationFeignClient.getOrganization(organizationId);
+                organization = organizationDiscoveryClient.getOrganization(organizationId);
                 break;
             default:
                 organization = organizationRestTemplateClient.getOrganization(organizationId);
