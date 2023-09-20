@@ -5,17 +5,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.transform.Source;
 import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
 @RefreshScope
-//@EnableEurekaClient
+//스프링 클라우드 스트림이 메시지 브로커에 애플리케이션을 바인딩하도록 지정
+//Source 클래스에서 정의된 채널들을 이용하여 메시지 브로커와 통신할 것이라고 알림
+@EnableBinding(Source.class)
 public class OrganizationServiceApplication {
 
 	public static void main(String[] args) {
