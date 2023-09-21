@@ -18,6 +18,8 @@ public class OrganizationService {
 
     @Autowired
     SimpleSourceBean simpleSourceBean;
+    
+    //조직 데이터를 변경하는 모든 메서드는 메시지를 발행한다
 
     public Organization findById(String organizationId){
         Optional<Organization> opt = repository.findById(organizationId);
