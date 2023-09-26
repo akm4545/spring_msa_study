@@ -152,6 +152,19 @@
             <artifactId>spring-cloud-starter-stream-kafka</artifactId>
         </dependency>
 
+<!--        레디스 -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+
+<!--        jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <type>jar</type>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
