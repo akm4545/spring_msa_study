@@ -37,7 +37,7 @@ import java.util.Locale;
 //Feign 클라이언트 활성화
 @EnableFeignClients
 //유입되는 메시지를 수신하고자 Sink 인터페이스에 정의된 채널을 사용하도록 서비스 설정
-@EnableBinding(Sink.class)
+//@EnableBinding(Sink.class)
 public class LicenseServiceApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(LicenseServiceApplication.class);
@@ -47,10 +47,10 @@ public class LicenseServiceApplication {
 
     //    입력 채널에서 메시지를 받을 때마다 이 메서드를 실행
     //싱크 = 유입되는 각 메시지를 처리
-    @StreamListener(Sink.INPUT)
-    public void loggerSink(OrganizationChangeModel orgChange){
-        logger.debug("Received {} event for the organization id {}", orgChange.getAction(), orgChange.getOrganizationId());
-    }
+//    @StreamListener(Sink.INPUT)
+//    public void loggerSink(OrganizationChangeModel orgChange){
+//        logger.debug("Received {} event for the organization id {}", orgChange.getAction(), orgChange.getOrganizationId());
+//    }
 
     public static void main(String[] args){
         SpringApplication.run(LicenseServiceApplication.class, args);
