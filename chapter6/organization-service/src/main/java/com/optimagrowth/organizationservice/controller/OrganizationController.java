@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 
 @RestController
-@RequestMapping(value = "v1/organization")
+@RequestMapping(value = "/v1/organization")
 public class OrganizationController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class OrganizationController {
     @RolesAllowed("ADMIN")
     @RequestMapping(value = "/{organizationId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrganization(@PathVariable("organizationId") String id, @RequestBody Organization organization){
-        service.delete(organization);
+    public void deleteOrganization(@PathVariable("organizationId") String organizationId){
+        service.delete(organizationId);
     }
 }
