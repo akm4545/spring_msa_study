@@ -165,6 +165,18 @@
             <type>jar</type>
         </dependency>
 
+<!--        슬루스 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.3</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

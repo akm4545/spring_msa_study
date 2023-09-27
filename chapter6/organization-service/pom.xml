@@ -111,6 +111,19 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-stream-kafka</artifactId>
 		</dependency>
+
+		<!--        슬루스 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+
+<!--	 로그스태시 인코더-->
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>6.3</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
