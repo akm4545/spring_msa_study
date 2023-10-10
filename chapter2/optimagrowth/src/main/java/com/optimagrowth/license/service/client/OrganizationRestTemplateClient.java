@@ -1,5 +1,6 @@
 package com.optimagrowth.license.service.client;
 
+import brave.Tracer;
 import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.OrganizationRedisRepository;
 import com.optimagrowth.license.utils.UserContext;
@@ -22,6 +23,10 @@ public class OrganizationRestTemplateClient {
 //    표준 RestTemplate에 대한 드롭인 대체룸, 액세스 토큰의 전파 처리
     @Autowired
     private KeycloakRestTemplate restTemplate;
+
+    //스프링 클라우드 슬루스 추적 정보 엑세스 용
+    @Autowired
+    Tracer tracer;
 
     @Autowired
     OrganizationRedisRepository redisRepository;
