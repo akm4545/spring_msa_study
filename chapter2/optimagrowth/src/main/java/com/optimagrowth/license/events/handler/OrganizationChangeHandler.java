@@ -21,6 +21,8 @@ public class OrganizationChangeHandler {
     public void loggerSink(OrganizationChangeModel organization){
         logger.debug("Received a message of type " + organization.getType());
 
+        System.out.println(organization.getAction());
+
         //데이터의 액션에 따라 처리
         switch(organization.getAction()){
             case "GET":
@@ -32,7 +34,7 @@ public class OrganizationChangeHandler {
             case "UPDATE":
                 logger.debug("Received a UPDATE event from the organization service for organization id {}", organization.getOrganizationId());
                 break;
-            case "DELETE":
+            case "DELETED":
                 logger.debug("Received a DELETE event from the organization service for organization id {}", organization.getOrganizationId());
                 break;
             default:

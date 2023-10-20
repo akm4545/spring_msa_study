@@ -1,5 +1,6 @@
 package com.optimagrowth.license.service.client;
 
+import brave.ScopedSpan;
 import brave.Tracer;
 import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.OrganizationRedisRepository;
@@ -34,6 +35,9 @@ public class OrganizationRestTemplateClient {
     private static final Logger logger = LoggerFactory.getLogger(OrganizationRestTemplateClient.class);
 
     private Organization checkRedisCache(String organizationId){
+        //사용자 정의 스팬 생성
+        ScopedSpan newSpan = tracer.startScopedSpan("readLicensingDataFromRedis");
+
         try {
             //조직Id 로 레디스에서 조회
             return redisRepository
@@ -43,6 +47,13 @@ public class OrganizationRestTemplateClient {
             logger.error("Error encountered while trying to retrieve organization {} check Redis Cache. Exception {}", organizationId, e);
 
             return null;
+        } finally {
+            //태그 정보를 스팬에 추가하고 집킨이 캡처할 서비스 이름 지정
+            newSpan.tag("peer.service", "redis");
+            newSpan.annotate("Client received");
+            
+            //스팬을 닫고 종료
+            newSpan.finish();
         }
     }
 

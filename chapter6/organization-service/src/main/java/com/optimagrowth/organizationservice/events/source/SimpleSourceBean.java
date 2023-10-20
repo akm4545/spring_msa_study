@@ -26,17 +26,25 @@ public class SimpleSourceBean {
     public void publishOrganizationChange(ActionEnum action, String organizationId){
         logger.debug("Sending Kafka message {} for Organization Id: {}", action, organizationId);
 
-        //메시지 발행
-        OrganizationChangeModel change = new OrganizationChangeModel(
-                OrganizationChangeModel.class.getTypeName(),
-                action.toString(),
-                organizationId,
-                UserContext.getCorrelationId()
-        ); 
+        try{
+            //메시지 발행
+            OrganizationChangeModel change = new OrganizationChangeModel(
+                    OrganizationChangeModel.class.getTypeName(),
+                    action.toString(),
+                    organizationId,
+                    UserContext.getCorrelationId()
+            );
+
+            source.output().send(MessageBuilder.withPayload(change).build());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        logger.debug("Sending complete");
 
         //Source 클래스에서 정의된 채널에서 전달된 메시지를 발행
         //Source 인터페이스는 서비스를 하나의 채널에서만 발행할 때 편리
         //메시지 브로커에 메시지를 전달
-        source.output().send(MessageBuilder.withPayload(change).build());
+//        source.output().send(MessageBuilder.withPayload(change).build());
     }
 }
