@@ -7,7 +7,7 @@ spring:
     active: native
   cloud:
     config:
-      server:
+      server: 
         # 볼트 사용
 #        vault:
 #          port: 8200
