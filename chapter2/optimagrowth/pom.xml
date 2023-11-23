@@ -203,46 +203,86 @@
         </dependencies>
     </dependencyManagement>
 
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                &lt;!&ndash;이미지 이름 설정&ndash;&gt;-->
+<!--                <configuration>-->
+<!--                    <image>-->
+<!--                        <name>${docker.image.prefix}/${project.artifactId}</name>-->
+<!--                    </image>-->
+<!--                    &lt;!&ndash;레이어 구성 활성화&ndash;&gt;-->
+<!--                    <layers>-->
+<!--                        <enabled>true</enabled>-->
+<!--                    </layers>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-surefire-plugin</artifactId>-->
+<!--                <version>2.22.2</version>-->
+<!--                <configuration>-->
+<!--                    <skipTests>true</skipTests>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
+<!--            &lt;!&ndash;            도커 파일 메이븐&ndash;&gt;-->
+<!--&lt;!&ndash;            Maven을 통해 Docker Image를 만듦&ndash;&gt;-->
+<!--&lt;!&ndash;            mvn clean package docker:build 로 메이븐을 이용해 빌드하면 아래 설정을 사용 가능&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>com.spotify</groupId>-->
+<!--                <artifactId>dockerfile-maven-plugin</artifactId>-->
+<!--                <version>1.4.13</version>-->
+<!--                <configuration>-->
+<!--&lt;!&ndash;                    리모트 저장소 이름&ndash;&gt;-->
+<!--                    <repository>${docker.image.prefix}/${project.artifactId}</repository>-->
+<!--&lt;!&ndash;                    프로젝트 버전 태그&ndash;&gt;-->
+<!--                    <tag>${project.version}</tag>-->
+<!--                    <buildArgs>-->
+<!--&lt;!&ndash;                        JAR 파일 위치 Dockerfile에서 사용&ndash;&gt;-->
+<!--                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>-->
+<!--                    </buildArgs>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>default</id>-->
+<!--                        <phase>install</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                            <goal>push</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--이미지 이름 설정-->
-                <configuration>
-                    <image>
-                        <name>${docker.image.prefix}/${project.artifactId}</name>
-                    </image>
-                    <!--레이어 구성 활성화-->
-                    <layers>
-                        <enabled>true</enabled>
-                    </layers>
-                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
 
-            <!--            도커 파일 메이븐-->
-<!--            Maven을 통해 Docker Image를 만듦-->
-<!--            mvn clean package docker:build 로 메이븐을 이용해 빌드하면 아래 설정을 사용 가능-->
+            <!--  This plugin is used to create a docker image and publish the image to docker hub -->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
                 <configuration>
-<!--                    리모트 저장소 이름-->
                     <repository>${docker.image.prefix}/${project.artifactId}</repository>
-<!--                    프로젝트 버전 태그-->
                     <tag>${project.version}</tag>
                     <buildArgs>
-<!--                        JAR 파일 위치 Dockerfile에서 사용-->
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
