@@ -1,6 +1,11 @@
 server:
   port: 8072
 
+logstash.host: 3.136.161.26:5000
+
+logging:
+  config: classpath:logback-delayed.xml
+
 eureka:
   instance:
     preferIpAddress: true
@@ -8,12 +13,14 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+#      defaultZone: http://localhost:8070/eureka/
+      defaultZone: http://eurekaserver:8070/eureka/
 
 spring:
   cloud:
     zipkin:
-      baseUrl: http://localhost:9411 
+#      baseUrl: http://localhost:9411
+      baseUrl: http://zipkin:9411 
     sleuth:
       sampler:
         percentage: 1
@@ -49,6 +56,16 @@ spring:
           filters:
             - RewritePath=/license/(?<path>.*), /$\{path}
             - RemoveRequestHeader= Cookie,Set-Cookie
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  bearer-only: true
+  credentials:
+    secret: 5988f899-a5bf-4f76-b15f-f1cd0d2c81ba
+  realm: spmia-realm
+  resource: ostock
+  ssl-required: external
+  use-resource-role-mappings: true
 
 Management:
   endpoint:
